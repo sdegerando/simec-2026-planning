@@ -1,0 +1,360 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>SIMEC 2026 — Planning général</title>
+<meta name="robots" content="noindex">
+<link data-keep="" rel="preconnect" href="https://fonts.googleapis.com">
+<link data-keep="" rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link data-keep="" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&amp;family=IBM+Plex+Sans:wght@400;500;600;700&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap">
+<style>
+  /* Mise en page : alerte en tête, puis une colonne de lecture, planning par jour puis tableau de bord. Accent bleu-violet, repris de la sphère « Fineterre IA ». Tous les textes sont modifiables en mode édition. */
+  :root{
+    --ground:#f4f6fa;--surface:#fff;--surface-2:#eef1f7;--ink:#171a24;--ink-soft:#3a3f4d;
+    --muted:#6b7183;--line:#dfe3ec;--line-strong:#c8cede;--accent:#2f5fe0;--accent-soft:#e7edfd;
+    --accent-ink:#1c40a8;--on-accent:#fff;--violet:#7b5bd6;--ok:#1f8f63;--ok-soft:#e2f3ec;--warn:#b7791f;
+    --warn-soft:#fbf0da;--crit:#c9453f;--crit-soft:#fbe6e5;
+    --shadow:0 1px 2px rgba(20,25,45,.05),0 8px 24px -14px rgba(20,25,45,.22);--radius:14px;
+  }
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+    --ground:#0e1016;--surface:#171a23;--surface-2:#1f232f;--ink:#eef1f8;--ink-soft:#c3c9d8;
+    --muted:#8a91a4;--line:#2a2f3d;--line-strong:#3a4152;--accent:#6d92f5;--accent-soft:#1c2544;
+    --accent-ink:#a9c0fb;--on-accent:#0b0e18;--violet:#a892ef;--ok:#4cc091;--ok-soft:#12271f;--warn:#e0a94a;
+    --warn-soft:#2c2412;--crit:#ef7a75;--crit-soft:#2e1817;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 12px 30px -16px rgba(0,0,0,.6);color-scheme:dark}}
+  :root[data-theme="dark"]{
+    --ground:#0e1016;--surface:#171a23;--surface-2:#1f232f;--ink:#eef1f8;--ink-soft:#c3c9d8;
+    --muted:#8a91a4;--line:#2a2f3d;--line-strong:#3a4152;--accent:#6d92f5;--accent-soft:#1c2544;
+    --accent-ink:#a9c0fb;--on-accent:#0b0e18;--violet:#a892ef;--ok:#4cc091;--ok-soft:#12271f;--warn:#e0a94a;
+    --warn-soft:#2c2412;--crit:#ef7a75;--crit-soft:#2e1817;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 12px 30px -16px rgba(0,0,0,.6);color-scheme:dark}
+  *{box-sizing:border-box}
+  body{background:var(--ground);color:var(--ink);font-family:"IBM Plex Sans",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;font-size:1rem;line-height:1.55;-webkit-font-smoothing:antialiased;margin:0}
+  .wrap{max-width:1080px;margin:0 auto;padding-inline:20px;padding-block:0 84px}
+  .mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-variant-numeric:tabular-nums}
+  h1,h2,h3{font-family:"Spectral",Georgia,serif;text-wrap:balance;line-height:1.15;margin:0}
+  a{color:var(--accent-ink)}
+  button:focus-visible,a:focus-visible,input[type=checkbox]:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  /* ---- alerte en tête de page ---- */
+  .flash{margin-top:20px;background:var(--surface);border:1px solid var(--line);border-left:6px solid var(--crit);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px 20px 18px}
+  .flash.warn{border-left-color:var(--warn)}.flash.info{border-left-color:var(--accent)}.flash.ok{border-left-color:var(--ok)}
+  .flash .fhead{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+  .flash .ftag{font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;font-weight:700;padding:3px 8px;border-radius:6px;background:var(--crit-soft);color:var(--crit);align-self:center}
+  .flash.warn .ftag{background:var(--warn-soft);color:var(--warn)}.flash.info .ftag{background:var(--accent-soft);color:var(--accent-ink)}.flash.ok .ftag{background:var(--ok-soft);color:var(--ok)}
+  .flash h2{font-size:1.3rem;font-weight:600}
+  .flash .fdate{margin-left:auto;font-family:"IBM Plex Mono",monospace;font-size:.8rem;color:var(--muted);white-space:nowrap}
+  .flash .ftext{margin-top:8px;white-space:pre-wrap;overflow-wrap:anywhere;font-size:1rem;color:var(--ink)}
+  .flash .ftext.empty{color:var(--muted);font-style:italic}
+  .flash .egrid{display:grid;gap:6px}
+  .flash .egrid .row3{display:grid;grid-template-columns:1fr 160px 150px;gap:6px}
+  @media (max-width:640px){.flash .egrid .row3{grid-template-columns:1fr}}
+  header.masthead{position:relative;overflow:hidden;margin-top:16px;border:1px solid var(--line);border-radius:var(--radius);
+    background:radial-gradient(120% 140% at 88% -10%,color-mix(in srgb,var(--violet) 26%,transparent),transparent 60%),
+      radial-gradient(90% 120% at 96% 20%,color-mix(in srgb,var(--accent) 30%,transparent),transparent 55%),var(--surface);box-shadow:var(--shadow)}
+  .masthead .inner{padding:32px clamp(22px,4vw,44px)}
+  .eyebrow{font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--accent-ink);font-weight:600}
+  .masthead h1{font-size:clamp(1.9rem,5vw,3.1rem);font-weight:700;margin:.35em 0 .12em;max-width:15ch}
+  .masthead .sub{font-family:"Spectral",serif;font-style:italic;font-size:clamp(1.02rem,2.4vw,1.35rem);color:var(--ink-soft);max-width:34ch}
+  .masthead .resume{position:relative;z-index:1;max-width:62ch;margin:18px 0 0;font-size:1.02rem;line-height:1.62;color:var(--ink);overflow-wrap:anywhere;white-space:pre-wrap}
+  .factbar{display:flex;flex-wrap:wrap;gap:10px 26px;margin-top:20px;padding-top:18px;border-top:1px solid var(--line)}
+  .fact{display:flex;flex-direction:column;gap:2px}
+  .fact .k{font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  .fact .v{font-weight:600;font-size:.95rem}
+  .masthead .egrid{display:grid;gap:8px;position:relative;z-index:1}
+  .factedit{display:grid;grid-template-columns:minmax(120px,160px) 1fr auto;gap:6px;align-items:center}
+  @media (max-width:560px){.factedit{grid-template-columns:1fr auto}.factedit .f:first-child{grid-column:1/-1}}
+  .sphere{position:absolute;right:clamp(-70px,-4vw,-40px);top:-40px;width:220px;height:220px;border-radius:50%;
+    background:radial-gradient(circle at 35% 32%,#fff9,transparent 42%),radial-gradient(circle at 62% 68%,color-mix(in srgb,var(--violet) 70%,transparent),transparent 60%),radial-gradient(circle at 50% 50%,var(--accent),color-mix(in srgb,var(--violet) 60%,#101));opacity:.9;pointer-events:none}
+  @media (max-width:640px){.sphere{display:none}}
+  .toolbar{display:flex;align-items:center;gap:10px;margin:22px 0 4px;flex-wrap:wrap}
+  .toolbar .upd{font-size:.84rem;color:var(--muted)}
+  .toolbar .spacer{flex:1}
+  .btn{font-family:inherit;font-size:.84rem;cursor:pointer;border:1px solid var(--line-strong);background:var(--surface);color:var(--ink-soft);border-radius:999px;padding:7px 14px}
+  .btn:hover{border-color:var(--accent);color:var(--accent-ink)}
+  .btn.primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+  .btn.primary:hover{filter:brightness(1.05);color:var(--on-accent)}
+  .btn.primary:disabled{opacity:.5;cursor:default;filter:none}
+  .btn.on{background:var(--accent-soft);border-color:var(--accent);color:var(--accent-ink)}
+  section{margin-top:32px}
+  .sec-head{display:flex;align-items:baseline;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+  .sec-head h2{font-size:1.5rem;font-weight:600}
+  .sec-head .note{font-size:.85rem;color:var(--muted);margin-left:auto;text-align:right;font-variant-numeric:tabular-nums}
+  .sec-head.edit{display:grid;grid-template-columns:1fr minmax(160px,260px);gap:8px}
+  @media (max-width:560px){.sec-head.edit{grid-template-columns:1fr}}
+  .alerts{display:grid;gap:10px}
+  .alert{display:grid;grid-template-columns:auto 1fr auto;gap:12px;background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--crit);border-radius:12px;padding:13px 16px;box-shadow:var(--shadow)}
+  .alert.warn{border-left-color:var(--warn)}.alert.info{border-left-color:var(--accent)}.alert.ok{border-left-color:var(--ok)}
+  .alert .tag{align-self:start;font-size:.64rem;letter-spacing:.06em;text-transform:uppercase;font-weight:700;padding:3px 8px;border-radius:6px;white-space:nowrap}
+  .alert.warn .tag{background:var(--warn-soft);color:var(--warn)}.alert.info .tag{background:var(--accent-soft);color:var(--accent-ink)}
+  .alert.crit .tag{background:var(--crit-soft);color:var(--crit)}.alert.ok .tag{background:var(--ok-soft);color:var(--ok)}
+  .alert .bd{font-size:.95rem;white-space:pre-wrap;overflow-wrap:anywhere}
+  .alert .tagedit{display:grid;gap:6px;min-width:130px}
+  .legend{display:flex;flex-wrap:wrap;gap:8px 16px;font-size:.82rem;color:var(--muted);margin-bottom:10px;align-items:center}
+  .pill{display:inline-flex;align-items:center;gap:5px;font-size:.72rem;font-weight:600;padding:3px 9px;border-radius:999px;white-space:nowrap}
+  .pill::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.85}
+  .pill.ok{background:var(--ok-soft);color:var(--ok)}.pill.tbc{background:var(--warn-soft);color:var(--warn)}.pill.def{background:var(--crit-soft);color:var(--crit)}
+  .banner-inst{display:flex;align-items:flex-start;gap:12px;background:linear-gradient(90deg,var(--accent-soft),transparent);border:1px dashed var(--line-strong);border-radius:12px;padding:12px 16px;margin-bottom:18px;font-size:.92rem}
+  .banner-inst>div{flex:1;min-width:0;white-space:pre-wrap;overflow-wrap:anywhere}
+  .banner-inst .dot{width:12px;height:12px;border-radius:50%;flex:none;margin-top:4px;background:radial-gradient(circle at 35% 35%,#fff8,transparent 45%),radial-gradient(circle,var(--accent),var(--violet))}
+  .day{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);margin-bottom:14px;box-shadow:var(--shadow);overflow:hidden}
+  .day>.dhead{display:flex;align-items:baseline;gap:12px;padding:12px 18px;background:var(--surface-2);border-bottom:1px solid var(--line)}
+  .day>.dhead.edit{display:grid;grid-template-columns:minmax(120px,200px) minmax(100px,160px) 1fr auto;gap:8px;align-items:center}
+  @media (max-width:560px){.day>.dhead.edit{grid-template-columns:1fr 1fr}}
+  .day .dow{font-family:"Spectral",serif;font-size:1.12rem;font-weight:600}
+  .day .dnum{font-family:"IBM Plex Mono",monospace;font-size:.82rem;color:var(--muted)}
+  .day .dcount{margin-left:auto;font-size:.75rem;color:var(--muted)}
+  /* ---- planning en colonnes : Horaire / Choix / Type / Titre / Public / Contenu / Enseignants référents / Remarques ---- */
+  .tscroll{overflow-x:auto}
+  table.ptable{width:100%;border-collapse:collapse;font-size:.82rem;line-height:1.45;min-width:720px}
+  .ptable th{text-align:left;font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600;padding:8px 10px;border-bottom:1px solid var(--line);background:var(--surface);vertical-align:bottom;white-space:nowrap}
+  .ptable td{padding:10px 10px;border-top:1px solid var(--line);vertical-align:top;overflow-wrap:anywhere}
+  .ptable tr:first-child td{border-top:0}
+  .ptable td.c-time{font-family:"IBM Plex Mono",monospace;color:var(--accent-ink);font-weight:500;white-space:nowrap;font-size:.8rem}
+  .ptable td.c-title{font-weight:600;min-width:150px}
+  .ptable td.c-type{color:var(--ink-soft)}
+  .ptable td.c-public{color:var(--ink-soft);min-width:120px}
+  .ptable td.c-contenu{white-space:pre-wrap;color:var(--ink-soft);min-width:180px}
+  .ptable td.c-ref{color:var(--ink-soft)}
+  .ptable th.col-rem,.ptable td.c-rem{color:var(--muted);font-style:italic;white-space:pre-wrap;min-width:120px;background:color-mix(in srgb,var(--surface-2) 60%,transparent)}
+  .ptable td .vide{color:var(--line-strong)}
+  .ptable .fill{margin-top:4px}
+  /* mode grisé : réservé au travail interne, n'apparaît pas à l'impression */
+  .grise{opacity:.55}
+  .day.grise{background:repeating-linear-gradient(135deg,transparent,transparent 10px,color-mix(in srgb,var(--surface-2) 70%,transparent) 10px,color-mix(in srgb,var(--surface-2) 70%,transparent) 11px),var(--surface)}
+  .tag-grise{display:inline-block;font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:var(--muted);border:1px dashed var(--line-strong);border-radius:6px;padding:1px 6px;margin-left:8px;vertical-align:middle;white-space:nowrap}
+  .ptable td.c-title .tag-grise{margin-left:0;margin-top:4px;display:inline-block}
+  .chk{display:inline-flex;align-items:center;gap:6px;font-size:.8rem;color:var(--ink-soft);white-space:nowrap;cursor:pointer}
+  .chk input{width:15px;height:15px;accent-color:var(--accent);margin:0}
+  .day>.dhead .chk{margin-left:auto}
+  @media (max-width:760px){
+    table.ptable{min-width:0}
+    .ptable thead{display:none}
+    .ptable tr{display:block;border-top:1px solid var(--line);padding:6px 0}
+    .ptable tr:first-child{border-top:0}
+    .ptable td{display:grid;grid-template-columns:96px 1fr;gap:8px;border-top:0;padding:4px 14px}
+    .ptable td::before{content:attr(data-l);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600;padding-top:3px}
+    .ptable td.c-rem{background:transparent}
+    .ptable td>.pill{justify-self:start}
+  }
+  /* ---- édition d'un temps fort ---- */
+  .ev{padding:12px 14px;border-top:1px solid var(--line)}
+  .ev:first-of-type{border-top:0}
+  .ev .egrid{display:grid;gap:6px}
+  .ev .egrid .rowa{display:grid;grid-template-columns:110px 140px 1fr auto auto;gap:6px;align-items:center}
+  .ev .egrid .rowb{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+  @media (max-width:640px){.ev .egrid .rowa{grid-template-columns:1fr 1fr}.ev .egrid .rowa .f.type{grid-column:1/-1}.ev .egrid .rowb{grid-template-columns:1fr}}
+  /* contenu d'une action : texte renseigné, ou invitation à le renseigner */
+  .contenu{margin-top:9px;padding:9px 12px;background:var(--surface-2);border-radius:10px;color:var(--ink-soft);font-size:.88rem}
+  .contenu .clabel{display:block;margin-bottom:2px;font-size:.66rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  .contenu .ctext{white-space:pre-wrap;overflow-wrap:anywhere}
+  .fill{margin-top:8px;display:inline-flex;align-items:center;gap:6px;cursor:pointer;border:1px dashed var(--line-strong);background:transparent;color:var(--muted);border-radius:8px;padding:4px 10px;font-family:inherit;font-size:.8rem}
+  .fill:hover{border-color:var(--accent);color:var(--accent-ink);background:var(--accent-soft)}
+  .board{display:grid;grid-template-columns:1.55fr 1fr;gap:16px;align-items:start}
+  @media (max-width:800px){.board{grid-template-columns:1fr}}
+  .board>*{min-width:0}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+  .card>h3{padding:15px 18px 0;font-size:1.08rem;font-weight:600}
+  .card>.csub{padding:2px 18px 0;font-size:.82rem;color:var(--muted)}
+  .card>.chead{padding:15px 18px 0;display:grid;gap:6px}
+  .rows{list-style:none;margin:10px 0 8px;padding:0}
+  .rows li{border-top:1px solid var(--line)}
+  .rows li:first-child{margin-top:8px}
+  .action{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:start;padding:11px 18px}
+  .action input[type=checkbox]{margin-top:3px;width:17px;height:17px;accent-color:var(--accent);cursor:pointer;flex:none}
+  .action .txt{font-size:.92rem;overflow-wrap:anywhere}.action .txt .meta{display:block;font-size:.78rem;color:var(--muted);margin-top:2px}
+  .action.done .txt{color:var(--muted)}
+  .action.done .tx{text-decoration:line-through}
+  .due{font-size:.72rem;font-weight:600;color:var(--warn);white-space:nowrap;font-family:"IBM Plex Mono",monospace}
+  .due.soon{color:var(--crit)}
+  .contact{padding:10px 18px}.contact .nm{font-weight:600;font-size:.92rem}.contact .rl{font-size:.8rem;color:var(--muted)}.contact a{font-size:.82rem;word-break:break-all}.contact .tel{font-size:.82rem;color:var(--ink-soft);font-variant-numeric:tabular-nums}
+  .mile{display:grid;grid-template-columns:auto 1fr;gap:14px;padding:10px 18px;align-items:center}
+  .mile .md{font-family:"IBM Plex Mono",monospace;font-size:.82rem;font-weight:600;color:var(--accent-ink)}
+  .mile .ml{font-size:.9rem}
+  footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);font-size:.8rem;color:var(--muted);text-align:center;white-space:pre-wrap}
+  footer.edit{text-align:left}
+  /* ---- edit mode ---- */
+  input.f,textarea.f,select.f{font-family:inherit;font-size:.9rem;color:var(--ink);background:var(--ground);border:1px solid var(--line-strong);border-radius:8px;padding:6px 8px;width:100%}
+  textarea.f{resize:vertical;min-height:38px;line-height:1.4;overflow-y:hidden}
+  input.f:focus,textarea.f:focus,select.f:focus{outline:2px solid var(--accent);outline-offset:0;border-color:var(--accent)}
+  input.f.h{font-family:"Spectral",Georgia,serif;font-weight:600;font-size:1.3rem}
+  input.f.h1{font-size:clamp(1.6rem,4vw,2.4rem);font-weight:700}
+  input.f.h3{font-family:"Spectral",Georgia,serif;font-weight:600;font-size:1.05rem}
+  input.f.eyebrow{font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--accent-ink)}
+  textarea.f.sub{font-family:"Spectral",serif;font-style:italic;font-size:1.1rem}
+  .flabel{display:block;margin-top:8px;font-size:.66rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  .ev .egrid .flabel{margin-top:4px;margin-bottom:-2px}
+  .rowd{display:grid;grid-template-columns:1fr auto;gap:6px;align-items:center}
+  .del{cursor:pointer;border:1px solid var(--line-strong);background:var(--surface);color:var(--crit);border-radius:8px;width:28px;height:28px;font-size:1rem;line-height:1;flex:none}
+  .del:hover{background:var(--crit-soft);border-color:var(--crit)}
+  .del.confirm{width:auto;height:auto;padding:5px 10px;font-size:.78rem;background:var(--crit-soft);border-color:var(--crit);white-space:normal;text-align:left}
+  .add{margin:2px 18px 14px;display:inline-flex;align-items:center;gap:6px;cursor:pointer;border:1px dashed var(--line-strong);background:transparent;color:var(--accent-ink);border-radius:8px;padding:6px 12px;font-size:.84rem;font-family:inherit}
+  .add:hover{border-color:var(--accent);background:var(--accent-soft)}
+  .day .add{margin:0 18px 14px}
+  .masthead .add{margin:4px 0 0}
+  .editnote{font-size:.8rem;color:var(--muted);margin:6px 0 0}
+  .btn.mini{padding:4px 10px;font-size:.76rem}
+  .typefree{min-width:0}
+  .savebar{position:sticky;bottom:0;z-index:20;margin-top:16px;display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--line-strong);border-radius:12px;padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));box-shadow:0 -4px 20px -12px rgba(20,25,45,.4)}
+  .savebar .dotu{width:9px;height:9px;border-radius:50%;background:var(--muted)}
+  .savebar.dirty .dotu{background:var(--warn)}
+  .savebar .msg{font-size:.85rem;color:var(--ink-soft)}
+  .ro-note{font-size:.8rem;color:var(--muted);border:1px solid var(--line);border-radius:8px;padding:4px 10px}
+  [hidden]{display:none!important}
+  /* ---- impression du programme : sans les éléments de travail (alerte, alertes de relecture, tableau de bord, remarques, lignes et journées grisées) ---- */
+  @media print{
+    @page{size:A4 landscape;margin:12mm}
+    :root,:root[data-theme="dark"]{--ground:#fff;--surface:#fff;--surface-2:#f3f4f7;--ink:#000;--ink-soft:#222;--muted:#555;--line:#bbb;--line-strong:#999;--accent:#1c40a8;--accent-soft:#eef1fa;--accent-ink:#1c40a8;--violet:#5a4aa8;--ok:#1f6f4f;--ok-soft:#e6f2ec;--warn:#8a5600;--warn-soft:#f6ecd4;--crit:#9a2f2a;--crit-soft:#f6e1df;--shadow:none;color-scheme:light}
+    body{background:#fff;color:#000;font-size:10.5pt}
+    .wrap{max-width:none;padding:0}
+    .flash,.toolbar,.editnote,.savebar,.sec-alertes,.sec-board,footer,.fill,.dcount,.legend,.tag-grise,.chk,.del,.add{display:none!important}
+    .grise,.col-rem,.c-rem{display:none!important}
+    .ptable .vide,.ptable th.col-vide,.ptable td.col-vide{display:none!important}
+    header.masthead{margin-top:0;box-shadow:none;border-color:#bbb;background:#fff}
+    .sphere{display:none}
+    .masthead .inner{padding:14px 18px}
+    .masthead h1{font-size:22pt}
+    .masthead .sub{font-size:12pt}
+    .banner-inst{border-color:#bbb;background:#f3f4f7}
+    .masthead h1{max-width:none}
+    .masthead .sub{max-width:none}
+    .masthead .resume{max-width:none;font-size:10.5pt;margin-top:10px}
+    .sec-head .note{display:none}
+    .day{box-shadow:none;border-color:#bbb;break-inside:auto;margin-bottom:10px}
+    .day>.dhead{background:#f3f4f7;break-after:avoid;page-break-after:avoid}
+    .tscroll{overflow:visible}
+    table.ptable{min-width:0;font-size:9.5pt}
+    .ptable th{background:#fff}
+    .ptable thead{display:table-header-group}
+    .ptable tr{display:table-row;break-inside:avoid;page-break-inside:avoid;padding:0}
+    .ptable td{display:table-cell;padding:6px 8px;border-top:1px solid #bbb}
+    .ptable td::before{content:none}
+    .pill{border:1px solid currentColor}
+    .pill::before{display:none}
+    section{margin-top:14px}
+  }
+</style>
+<style>
+/* Copie publique en lecture seule : mêmes règles que le programme imprimé (sans alerte, tableau de bord, remarques ni lignes grisées) */
+
+    
+    :root,:root[data-theme="dark"]{--ground:#fff;--surface:#fff;--surface-2:#f3f4f7;--ink:#000;--ink-soft:#222;--muted:#555;--line:#bbb;--line-strong:#999;--accent:#1c40a8;--accent-soft:#eef1fa;--accent-ink:#1c40a8;--violet:#5a4aa8;--ok:#1f6f4f;--ok-soft:#e6f2ec;--warn:#8a5600;--warn-soft:#f6ecd4;--crit:#9a2f2a;--crit-soft:#f6e1df;--shadow:none;color-scheme:light}
+    body{background:#fff;color:#000;font-size:10.5pt}
+    .wrap{max-width:none;padding:0}
+    .flash,.toolbar,.editnote,.savebar,.sec-alertes,.sec-board,footer,.fill,.dcount,.legend,.tag-grise,.chk,.del,.add{display:none!important}
+    .grise,.col-rem,.c-rem{display:none!important}
+    .ptable .vide,.ptable th.col-vide,.ptable td.col-vide{display:none!important}
+    header.masthead{margin-top:0;box-shadow:none;border-color:#bbb;background:#fff}
+    .sphere{display:none}
+    .masthead .inner{padding:14px 18px}
+    .masthead h1{font-size:22pt}
+    .masthead .sub{font-size:12pt}
+    .banner-inst{border-color:#bbb;background:#f3f4f7}
+    .masthead h1{max-width:none}
+    .masthead .sub{max-width:none}
+    .masthead .resume{max-width:none;font-size:10.5pt;margin-top:10px}
+    .sec-head .note{display:none}
+    .day{box-shadow:none;border-color:#bbb;break-inside:auto;margin-bottom:10px}
+    .day>.dhead{background:#f3f4f7;break-after:avoid;page-break-after:avoid}
+    .tscroll{overflow:visible}
+    table.ptable{min-width:0;font-size:9.5pt}
+    .ptable th{background:#fff}
+    .ptable thead{display:table-header-group}
+    .ptable tr{display:table-row;break-inside:avoid;page-break-inside:avoid;padding:0}
+    .ptable td{display:table-cell;padding:6px 8px;border-top:1px solid #bbb}
+    .ptable td::before{content:none}
+    .pill{border:1px solid currentColor}
+    .pill::before{display:none}
+    section{margin-top:14px}
+  
+body{background:var(--ground);color:var(--ink);font-size:1rem;padding:16px}
+.wrap{max-width:1080px;padding-inline:20px}
+header.masthead{margin-top:0;box-shadow:var(--shadow)}
+.masthead .inner{padding:28px clamp(22px,4vw,44px)}
+.masthead h1{font-size:clamp(1.9rem,5vw,3.1rem)}
+.masthead .sub{font-size:clamp(1.02rem,2.4vw,1.35rem)}
+.masthead .resume{font-size:1.02rem}
+table.ptable{font-size:.82rem}
+.ptable td{padding:10px}
+.day{border-radius:var(--radius)}
+.pub-note{text-align:center;font-size:.8rem;color:var(--muted);margin:28px 0 8px}
+</style></head><body><div id="app"><div class="wrap"><section class="flash warn" aria-label="Alerte, dernières informations"><div class="fhead"><span class="ftag">Alerte</span><h2>Alerte, dernières informations</h2><span class="fdate">15 oct. 2026</span></div><div class="ftext empty">Aucune information nouvelle pour le moment.</div></section><header class="masthead"><div class="sphere"></div><div class="inner"><div class="eyebrow">Conservatoire à Rayonnement Régional · Amiens Métropole</div><h1>SIMEC 2026</h1><div class="sub">L’invitée : l’IA — Intelligence artificielle, création et pratiques artistiques</div><p class="resume">Du 16 au 21 novembre 2026, la SIMEC accueille tous les publics, curieux comme initiés, au Conservatoire à rayonnement régional d’Amiens Métropole. Sous la direction artistique et scientifique de Stéphane de Gérando, elle associe découverte d’œuvres, expérimentation et réflexion sur les pratiques artistiques.
+
+Au cœur de cette édition, Fineterre IA, installation sonore et visuelle présentée en première mondiale, invite au dialogue avec un personnage virtuel. Conférences, masterclass et rencontres permettent d’explorer ce que l’IA change dans la création, l’écoute et la transmission.
+
+Moments forts ouverts à tout public
+
+Lundi 16 novembre
+• 18h-19h Conférence d’ouverture de la SIMEC 2026, avec présentation de l’installation sonore et visuelle, retransmise en direct à l’international
+
+Mardi 17 novembre
+• 17h-19h Installation sonore et visuelle Fineterre IA
+
+Mercredi 18 novembre
+• 17h-18h Installation sonore et visuelle Fineterre IA
+
+Jeudi 19 novembre
+• 18h-19h Introduction à l’intelligence artificielle, pratiques artistiques et création, conférence pour les élèves des départements danse, théâtre et musique
+
+Vendredi 20 novembre
+• 14h-17h30 Masterclass publique « L’IA et la création », étudiants bienvenus (en direct à l’international)
+• 19h-20h15 Conférence-concert de clôture « IA et pratiques artistiques », enseignants et étudiants bienvenus (en direct à l’international)
+
+Samedi 21 novembre
+• 12h-17h Installation sonore et visuelle Fineterre IA, découverte de l’IA et de la création, familles bienvenues
+
+Retransmission en direct (conférence d’ouverture du lundi 18h, masterclass du vendredi 14h, conférence-concert du vendredi 19h) : https://meet.google.com/cku-gfmw-sjr</p><div class="factbar"><div class="fact"><span class="k">Dates</span><span class="v">Lun. 16 → sam. 21 nov. 2026 (17h)</span></div><div class="fact"><span class="k">Lieu</span><span class="v">Auditorium Henri Dutilleux, CRR d’Amiens Métropole, 3 rue Desprez, Amiens</span></div><div class="fact"><span class="k">L’invitée</span><span class="v">L'intelligence artificielle</span></div><div class="fact"><span class="k">Direction artistique et scientifique</span><span class="v">Stéphane de Gérando</span></div><div class="fact"><span class="k">Retransmission en direct</span><span class="v">https://meet.google.com/cku-gfmw-sjr</span></div><div class="fact"><span class="k">Entrée</span><span class="v">Entrée libre</span></div><div class="fact"><span class="k">Programme complet</span><span class="v">amiens.fr/crr · fb.com/CRR.AmiensMetropole</span></div><div class="fact"><span class="k">Contact</span><span class="v">Stéphane de Gérando, s.de-gerando@amiens-metropole.com · Tél. CRR 03 22 80 52 50 · Ghislain Leroy, directeur du CRR</span></div></div></div></header><div class="toolbar"><span class="upd">Document de travail  · mis à jour le 19 oct. 2026</span><span class="spacer"></span><span class="ro-note">Lecture seule</span><button class="btn" data-act="print" title="Enregistre le programme dans un fichier (sans l’alerte, le tableau de bord, les remarques ni les éléments grisés) ; ouvrez-le : l’impression se lance">🖨 Programme à imprimer</button><button class="btn" data-act="theme">Thème clair / sombre</button><span class="upd" id="printmsg"></span></div><section class="sec-alertes"><div class="sec-head"><h2>Alertes de relecture</h2><span class="note">Points à surveiller</span></div><div class="alerts"></div></section><section class="sec-planning"><div class="sec-head"><h2>Planning des 6 jours</h2><span class="note" id="cnt">13 / 16 contenus renseignés</span></div><div class="legend">Choix : <span class="pill ok">Confirmé</span> <span class="pill tbc">À confirmer</span> <span class="pill def">À définir</span> <span style="margin-left:8px">· Les lignes et journées <span class="tag-grise" style="margin-left:0">grisées</span> et la colonne Remarques sont réservées au travail interne : elles n’apparaissent pas à l’impression.</span></div><div class="banner-inst"><span class="dot"></span><div>Quel rendez-vous choisir ?
+
+Découvrir l’installation
+L’installation Fineterre IA fonctionne en mode automatique ou interactif. Elle est accessible lors des créneaux publics du mardi, du mercredi et du samedi ; la conférence du lundi en présente le dispositif.
+
+Comprendre les enjeux de l’IA
+La conférence du jeudi propose une introduction à l’intelligence artificielle et à ses liens avec les pratiques artistiques. Elle s’adresse notamment aux élèves et étudiants des départements de musique, de danse et de théâtre, et reste ouverte à tous.
+
+Approfondir la création et la transmission
+Le vendredi à 14h, la masterclass du compositeur et chercheur Stéphane de Gérando présente des démarches de composition, d’analyse, d’orchestration virtuelle et d’écriture montrées pour la première fois. À 17h30, une conférence aborde un usage pratique : créer son site web d’artiste. Le soir, la conférence-concert élargit la réflexion à l’apprentissage, à l’enseignement et à l’interprétation.
+
+Assister au travail des étudiants
+Le samedi matin, la classe de composition mixte et électroacoustique ouvre au public une séance de travail et d’enregistrement avec le clarinettiste Jun Ishii : l’occasion de découvrir des pièces en cours et la démarche de leurs auteurs.
+
+Participer avec une classe
+Six séances « Bonjour IA, dialogues avec une intelligence artificielle » sont réservées aux groupes indiqués dans le planning. Les questions et les exemples sont adaptés à l’âge des élèves, du CP à la fin du collège. Les applications Jeux de voix et Zahr peuvent y être utilisées (présentation ci-dessous).
+
+Cinq axes pour les échanges
+•	Qui es-tu, IA ?
+•	Comment parle-t-on de toi, IA ?
+•	Composer avec des algorithmes.
+•	Création contemporaine et intelligence artificielle.
+•	Intelligence artificielle et pratiques artistiques.
+Les échanges s’appuient sur les œuvres, sur des expériences concrètes et sur le parcours de Stéphane de Gérando, dont les recherches sur le calcul et l’algorithmique remontent à 1992.
+
+Au cœur de l’installation
+
+Des œuvres sonores et visuelles
+Plusieurs œuvres génératives sont présentées en première mondiale : Requiem du signe, Hyperfranges, Embryon Corpus Hybridations, Murmure d’éternité, Dérive topologique I, OSV1 Territoire des ombres et HSVO1. Le parcours comprend également Globus-Vortex (vidéo) et Fragmentation (diaporama du Labyrinthe).
+D’autres réalisations illustrent l’analyse musicale, l’orchestration virtuelle, les exercices de style, la composition et la programmation de parties électroniques en temps réel pour la musique mixte. Les exemples vont de Bach à la musique électroacoustique.
+
+Jeux de voix · explorer sa voix comme matière musicale
+Destinée aux enfants de 6 à 12 ans, cette application transforme en temps réel les sons chantés, parlés ou soufflés dans un microphone et les répartit dans l’espace sonore. Les gestes, captés par une caméra, pilotent le traitement du son.
+Un partenaire musical leur répond à partir de fragments de leur propre voix. Sans partition ni réponse imposée, chaque enfant invente son parcours en essayant, en écoutant et en recommençant.
+
+Zahr · jouer avec le hasard
+Le hasard intervient dans les sons, les images, la partition et la forme de la pièce. Un musicien lit sur ordinateur une partition qui s’écrit sous ses yeux ; les sons sont traités en temps réel et une image projetée accompagne la musique. Le public peut contribuer au jeu sans en contrôler le résultat.
+</div></div><div class="day"><div class="dhead"><span class="dow">Lundi</span><span class="dnum">16 nov.</span><span class="dcount">2 temps forts</span></div><div class="tscroll"><table class="ptable"><thead><tr><th class="">Horaire</th><th class="">Choix</th><th class="">Type d’événement</th><th class="">Titre de l’événement</th><th class="">Public</th><th class="">Contenu</th><th class="">Enseignants référents</th><th class="col-rem">Remarques</th></tr></thead><tbody><tr><td class="c-time" data-l="Horaire">13:00–17:00</td><td class="c-st" data-l="Choix"><span class="pill ok">Confirmé</span></td><td class="c-type" data-l="Type">Répétition</td><td class="c-title" data-l="Titre">Répétition de la SIMEC 2026</td><td class="c-public" data-l="Public">Élèves du CRR.</td><td class="c-contenu" data-l="Contenu">Installation du dispositif : vidéoprojection sur grand écran et diffusion sonore octophonique.</td><td class="c-ref" data-l="Référents"><span class="vide">—</span></td><td class="c-rem" data-l="Remarques"><span class="vide">—</span></td></tr><tr><td class="c-time" data-l="Horaire">18:00–19:00</td><td class="c-st" data-l="Choix"><span class="pill ok">Confirmé</span></td><td class="c-type" data-l="Type">Conférence</td><td class="c-title" data-l="Titre">Conférence d’ouverture</td><td class="c-public" data-l="Public">Tout public.</td><td class="c-contenu" data-l="Contenu">Présentation de la SIMEC 2026 et de l’installation sonore et visuelle Fineterre IA.
+Retransmission en direct : https://meet.google.com/cku-gfmw-sjr</td><td class="c-ref" data-l="Référents">Stéphane de Gérando</td><td class="c-rem" data-l="Remarques"><span class="vide">—</span></td></tr></tbody></table></div></div><div class="day"><div class="dhead"><span class="dow">Mardi</span><span class="dnum">17 nov.</span><span class="dcount">3 temps forts</span></div><div class="tscroll"><table class="ptable"><thead><tr><th class="">Horaire</th><th class="">Choix</th><th class="">Type d’événement</th><th class="">Titre de l’événement</th><th class="">Public</th><th class="">Contenu</th><th class="">Enseignants référents</th><th class="col-rem">Remarques</th></tr></thead><tbody><tr><td class="c-time" data-l="Horaire">14:15–15:00</td><td class="c-st" data-l="Choix"><span class="pill ok">Confirmé</span></td><td class="c-type" data-l="Type">Séance jeune public</td><td class="c-title" data-l="Titre">Bonjour IA · séance 1</td><td class="c-public" data-l="Public">Groupe invité : 35 élèves de 9 et 10 ans, en fin d’école primaire (CHAM).</td><td class="c-contenu" data-l="Contenu">Découverte de l’intelligence artificielle et de ses liens avec la création et l’apprentissage, à travers des questions et des expériences adaptées à chaque âge.</td><td class="c-ref" data-l="Référents">Clothilde Sebert · chant choral 1C3 et 1C4</td><td class="c-rem" data-l="Remarques"><span class="vide">—</span></td></tr><tr><td class="c-time" data-l="Horaire">15:00–15:45</td><td class="c-st" data-l="Choix"><span class="pill ok">Confirmé</span></td><td class="c-type" data-l="Type">Séance jeune public</td><td class="c-title" data-l="Titre">Bonjour IA · séance 2</td><td class="c-public" data-l="Public">Groupe invité : 30 élèves de 7 et 8 ans.</td><td class="c-contenu" data-l="Contenu">Découverte de l’intelligence artificielle et de ses liens avec la création et l’apprentissage, à travers des questions et des expériences adaptées à chaque âge.</td><td class="c-ref" data-l="Référents">Clothilde Sebert · chant choral 1C2</td><td class="c-rem" data-l="Remarques"><span class="vide">—</span></td></tr><tr><td class="c-time" data-l="Horaire">17:00–19:00</td><td class="c-st" data-l="Choix"><span class="pill ok">Confirmé</span></td><td class="c-type" data-l="Type">Installation sonore et visuelle</td><td class="c-title" data-l="Titre">Installation Fineterre IA</td><td class="c-public" data-l="Public">Tout public.</td><td class="c-contenu" data-l="Contenu"><span class="vide">—</span></td><td class="c-ref" data-l="Référents"><span class="vide">—</span></td><td class="c-rem" data-l="Remarques"><span class="vide">—</span></td></tr></tbody></table></div></div><div class="day"><div class="dhead"><span class="dow">Mercredi</span><span class="dnum">18 nov.</span><span class="dcount">3 temps forts</span></div><div class="tscroll"><table class="ptable"><thead><tr><th class="">Horaire</th><th class="">Choix</th><th class="">Type d’événement</th><th class="">Titre de l’événement</th><th class="">Public</th><th class="">Contenu</th><th class="">Enseignants référents</th><th class="col-rem">Remarques</th></tr></thead><tbody><tr><td class="c-time" data-l="Horaire">13:15–13:45</td><td class="c-st" data-l="Choix"><span class="pill ok">Confirmé</span></td><td class="c-type" data-l="Type">Séance jeune public</td><td class="c-title" data-l="Titre">Bonjour IA · séance 3</td><td class="c-public" data-l="Public">Groupe invité : 52 élèves de CP, 6 ans.</td><td class="c-contenu" data-l="Contenu">Découverte de l’intelligence artificielle et de ses liens avec la création et l’apprentissage, à travers des questions et des expériences adaptées à chaque âge.</td><td class="c-ref" data-l="Référents">Cécile Baudon · parcours découverte</td><td class="c-rem" data-l="Remarques"><span class="vide">—</span></td></tr><tr><td class="c-time" data-l="Horaire">14:45–16:15</td><td class="c-st" data-l="Choix"><span class="pill ok">Confirmé</span></td><td class="c-type" data-l="Type">Rencontre pédagogique</td><td class="c-title" data-l="Titre">Bonjour IA · séance 4</td><td class="c-public" data-l="Public">Groupes invités : collégiens de trois sections de formation musicale.</td><td class="c-contenu" data-l="Contenu">Découverte de l’intelligence artificielle et de ses liens avec la création et l’apprentissage, à travers des questions et des expériences adaptées à chaque âge.</td><td class="c-ref" data-l="Référents">Bénédicte Baumgarten, Aurélien Grima et Jocelyn Loyer · FM, sections 29, 39 et 43 ; Hervé Winckels (CRR)</td><td class="c-rem" data-l="Remarques"><span class="vide">—</span></td></tr><tr><td class="c-time" data-l="Horaire">17:00–18:00</td><td class="c-st" data-l="Choix"><span class="pill ok">Confirmé</span></td><td class="c-type" data-l="Type">Installation sonore et visuelle</td><td class="c-title" data-l="Titre">Installation Fineterre IA</td><td class="c-public" data-l="Public">Tout public.</td><td class="c-contenu" data-l="Contenu"><span class="vide">—</span></td><td class="c-ref" data-l="Référents">Stéphane de Gérando</td><td class="c-rem" data-l="Remarques"><span class="vide">—</span></td></tr></tbody></table></div></div><div class="day"><div class="dhead"><span class="dow">Jeudi</span><span class="dnum">19 nov.</span><span class="dcount">3 temps forts</span></div><div class="tscroll"><table class="ptable"><thead><tr><th class="">Horaire</th><th class="">Choix</th><th class="">Type d’événement</th><th class="">Titre de l’événement</th><th class="">Public</th><th class="">Contenu</th><th class="">Enseignants référents</th><th class="col-rem">Remarques</th></tr></thead><tbody><tr><td class="c-time" data-l="Horaire">14:30–15:15</td><td class="c-st" data-l="Choix"><span class="pill ok">Confirmé</span></td><td class="c-type" data-l="Type">Rencontre pédagogique</td><td class="c-title" data-l="Titre">Bonjour IA · séance 5</td><td class="c-public" data-l="Public">Groupes invités : deux sections de formation musicale CHAM, niveau fin de collège.</td><td class="c-contenu" data-l="Contenu">Découverte de l’intelligence artificielle et de ses liens avec la création et l’apprentissage, à travers des questions et des expériences adaptées à chaque âge.</td><td class="c-ref" data-l="Référents">Jocelyn Loyer et Guilène Rannou · sections 31 et 41</td><td class="c-rem" data-l="Remarques"><span class="vide">—</span></td></tr><tr><td class="c-time" data-l="Horaire">15:30–16:15</td><td class="c-st" data-l="Choix"><span class="pill ok">Confirmé</span></td><td class="c-type" data-l="Type">Rencontre pédagogique</td><td class="c-title" data-l="Titre">Bonjour IA · séance 6</td><td class="c-public" data-l="Public">Groupes invités : deux classes de début de collège, 30 élèves.</td><td class="c-contenu" data-l="Contenu">Découverte de l’intelligence artificielle et de ses liens avec la création et l’apprentissage, à travers des questions et des expériences adaptées à chaque âge.</td><td class="c-ref" data-l="Référents">Guilène Rannou et Christophe Diawara · sections 32 et 37 ; Hervé Winckels</td><td class="c-rem" data-l="Remarques"><span class="vide">—</span></td></tr><tr><td class="c-time" data-l="Horaire">18:00–19:00</td><td class="c-st" data-l="Choix"><span class="pill ok">Confirmé</span></td><td class="c-type" data-l="Type">Conférence</td><td class="c-title" data-l="Titre">Introduction à l’IA, pratiques artistiques et création</td><td class="c-public" data-l="Public">Tout public ; notamment les élèves à partir de 13 ans et les étudiants des départements de musique, de danse et de théâtre.</td><td class="c-contenu" data-l="Contenu"><span class="vide">—</span></td><td class="c-ref" data-l="Référents"><span class="vide">—</span></td><td class="c-rem" data-l="Remarques"><span class="vide">—</span></td></tr></tbody></table></div></div><div class="day"><div class="dhead"><span class="dow">Vendredi</span><span class="dnum">20 nov.</span><span class="dcount">3 temps forts</span></div><div class="tscroll"><table class="ptable"><thead><tr><th class="">Horaire</th><th class="">Choix</th><th class="">Type d’événement</th><th class="">Titre de l’événement</th><th class="">Public</th><th class="">Contenu</th><th class="">Enseignants référents</th><th class="col-rem">Remarques</th></tr></thead><tbody><tr><td class="c-time" data-l="Horaire">14:00–17:30</td><td class="c-st" data-l="Choix"><span class="pill ok">Confirmé</span></td><td class="c-type" data-l="Type">Masterclass</td><td class="c-title" data-l="Titre">L’IA et la création · masterclass</td><td class="c-public" data-l="Public">Tout public ; notamment les classes de composition, d’écriture et d’analyse, les universités et les écoles d’art.</td><td class="c-contenu" data-l="Contenu">Possibilités et limites de l’IA dans les processus de création, à partir d’exemples concrets et d’une longue pratique des algorithmes.
+Parcours en sept extraits de masterclasses :
+1. Les intelligences artificielles en musique : introduction générale.
+2. Du calcul aux algorithmes : une trajectoire de 1992 à 2025.
+3. Création contemporaine et intelligence artificielle.
+4. Algorithm 711 : analyse.
+5. L’Art de la fugue, Contrapunctus VII, de Bach : analyse.
+6. Claude variations : analyse et écriture.
+7. Horizons chaotiques III : partie électronique en temps réel.
+Retransmission en direct : https://meet.google.com/cku-gfmw-sjr</td><td class="c-ref" data-l="Référents">Stéphane de Gérando</td><td class="c-rem" data-l="Remarques"><span class="vide">—</span></td></tr><tr><td class="c-time" data-l="Horaire">17:30–18:00</td><td class="c-st" data-l="Choix"><span class="pill ok">Confirmé</span></td><td class="c-type" data-l="Type">Conférence</td><td class="c-title" data-l="Titre">Artistes : créer son site web avec l’IA</td><td class="c-public" data-l="Public">Tout public ; notamment les enseignants, élèves et étudiants en musique, danse et théâtre, à partir de 15 ans.</td><td class="c-contenu" data-l="Contenu">Comment utiliser l’IA pour créer un site internet et présenter son travail artistique ? Vingt minutes d’exposé, suivies de dix minutes d’échange.</td><td class="c-ref" data-l="Référents">L. Bince, élève de la classe de composition mixte et électroacoustique</td><td class="c-rem" data-l="Remarques"><span class="vide">—</span></td></tr><tr><td class="c-time" data-l="Horaire">19:00–20:15</td><td class="c-st" data-l="Choix"><span class="pill ok">Confirmé</span></td><td class="c-type" data-l="Type">Conférence-concert</td><td class="c-title" data-l="Titre">IA et pratiques artistiques · conférence-concert</td><td class="c-public" data-l="Public">Tout public ; notamment les enseignants, directeurs de conservatoire, étudiants, grands élèves et responsables culturels.</td><td class="c-contenu" data-l="Contenu">Musique, danse, théâtre : quels usages de l’IA pour apprendre, transmettre et créer ? Exemples musicaux et réflexion critique abordent l’apprentissage instrumental, l’accompagnement, l’analyse, les outils pédagogiques et les dispositifs interactifs.
+Quelles possibilités ces outils ouvrent-ils ? Que révèlent les espoirs et les craintes qu’ils suscitent de notre rapport à l’art et à sa transmission ?
+Retransmission en direct : https://meet.google.com/cku-gfmw-sjr</td><td class="c-ref" data-l="Référents">Stéphane de Gérando, avec la participation de l’IA</td><td class="c-rem" data-l="Remarques"><span class="vide">—</span></td></tr></tbody></table></div></div><div class="day"><div class="dhead"><span class="dow">Samedi</span><span class="dnum">21 nov.</span><span class="dcount">2 temps forts</span></div><div class="tscroll"><table class="ptable"><thead><tr><th class="">Horaire</th><th class="">Choix</th><th class="">Type d’événement</th><th class="">Titre de l’événement</th><th class="">Public</th><th class="">Contenu</th><th class="">Enseignants référents</th><th class="col-rem">Remarques</th></tr></thead><tbody><tr><td class="c-time" data-l="Horaire">09:00–10:30</td><td class="c-st" data-l="Choix"><span class="pill ok">Confirmé</span></td><td class="c-type" data-l="Type">Rencontres expérimentales</td><td class="c-title" data-l="Titre">Rencontre expérimentale de la classe de composition</td><td class="c-public" data-l="Public">Tout public ; notamment les classes d’écriture et d’analyse, les lycéens TMD et CHAM, et les élèves de musique, de danse et de théâtre.</td><td class="c-contenu" data-l="Contenu">Séance publique de travail et d’enregistrement de pièces en cours, avec le clarinettiste invité Jun Ishii.
+Les pièces présentées :
+Teppei Sengoku · Bruit
+Pour clarinette et électronique. Enregistrement de la partie de clarinette.
+Marielle Fousse · De l’invisible sculpté
+Pour sons fixés.
+Tristan Faust · Khrôma, seuils
+Pièce algorithmique en temps réel.</td><td class="c-ref" data-l="Référents">Jun Ishii, Teppei Sengoku, Marielle Fousse, Tristan Faust</td><td class="c-rem" data-l="Remarques"><span class="vide">—</span></td></tr><tr><td class="c-time" data-l="Horaire">12:00–17:00</td><td class="c-st" data-l="Choix"><span class="pill ok">Confirmé</span></td><td class="c-type" data-l="Type">Installation sonore et visuelle</td><td class="c-title" data-l="Titre">Installation Fineterre IA</td><td class="c-public" data-l="Public">Tout public, familles bienvenues.</td><td class="c-contenu" data-l="Contenu">Découverte des œuvres sonores et visuelles et échanges avec l’IA.</td><td class="c-ref" data-l="Référents">Stéphane de Gérando</td><td class="c-rem" data-l="Remarques"><span class="vide">—</span></td></tr></tbody></table></div></div></section><section class="sec-board"><div class="sec-head"><h2>Tableau de bord</h2><span class="note">Cochez les actions traitées</span></div><div class="board"><div class="card"><h3>Actions &amp; relances</h3><div class="csub">Priorités pour finaliser le programme</div><ul class="rows"></ul></div><div><div class="card"><h3>Contacts clés</h3><ul class="rows"></ul></div><div class="card" style="margin-top:16px"><h3>Jalons</h3><ul class="rows"></ul></div></div></div></section><footer>SIMEC 2026 · page modifiable et enregistrée en ligne · sources : programme et échanges du 14 sept. 2026.</footer></div></div>
+<p class="pub-note">Copie publique en lecture seule du planning de travail « SIMEC PLANNING GENERAL 2026 », régénérée à chaque mise à jour · Conservatoire à rayonnement régional d’Amiens Métropole · Fineterre</p>
+</body></html>
